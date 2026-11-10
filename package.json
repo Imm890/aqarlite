@@ -15,9 +15,9 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed": "tsx scripts/seed.ts",
     "db:reset": "tsx scripts/migrate.ts --reset && tsx scripts/seed.ts",
-    "test": "vitest run",
+    "test": "vitest run && vitest run --config vitest.integration.config.mts",
     "test:unit": "vitest run tests/unit",
-    "test:integration": "vitest run tests/integration",
+    "test:integration": "vitest run --config vitest.integration.config.mts",
     "audit:prod": "npm audit --omit=dev --audit-level=high"
   },
   "dependencies": {
