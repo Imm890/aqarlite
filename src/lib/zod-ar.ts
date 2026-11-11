@@ -15,9 +15,8 @@ export function configureZodArabic(): void {
         case 'invalid_type':
           return issue.input === undefined ? 'هذا الحقل مطلوب.' : 'قيمة غير صالحة.';
         case 'too_small':
-          return issue.origin === 'string'
-            ? `يجب ألا يقل عن ${String(issue.minimum)} أحرف.`
-            : 'القيمة أقل من الحد المسموح.';
+          if (issue.origin !== 'string') return 'القيمة أقل من الحد المسموح.';
+          return Number(issue.minimum) <= 1 ? 'هذا الحقل مطلوب.' : `يجب ألا يقل عن ${String(issue.minimum)} أحرف.`;
         case 'too_big':
           return issue.origin === 'string'
             ? `يجب ألا يزيد عن ${String(issue.maximum)} حرفاً.`

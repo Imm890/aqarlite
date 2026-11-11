@@ -82,3 +82,10 @@ export function isFinalPriceWithinDiscount(
   if (finalPriceCents > unitPriceCents) return false;
   return finalPriceCents * 10_000 >= unitPriceCents * (10_000 - maxDiscountBasisPoints);
 }
+
+/** أقل سعر نهائي مسموح (سعر الوحدة − 5% مقرَّباً للأعلى إلى أقرب هللة) بحساب صحيح بحت. */
+export function minFinalPriceCents(unitPriceCents: number, maxDiscountBasisPoints = 500): number {
+  const numerator = unitPriceCents * (10_000 - maxDiscountBasisPoints);
+  const remainder = numerator % 10_000;
+  return (numerator - remainder) / 10_000 + (remainder === 0 ? 0 : 1);
+}

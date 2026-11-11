@@ -24,6 +24,7 @@ export interface ReservationDto {
   status: 'active' | 'expired' | 'converted';
   unitId: string;
   unitLabel: string;
+  unitPriceCents: number;
   clientId: string;
   clientName: string;
   repId: string;
@@ -40,6 +41,7 @@ interface ReservationRow {
   unit_id: string;
   project: string;
   number: string;
+  unit_price_cents: string;
   client_id: string;
   client_name: string;
   rep_id: string;
@@ -50,7 +52,7 @@ interface ReservationRow {
 }
 
 const SELECT = `
-  SELECT r.id, r.status, r.unit_id, u.project, u.number, r.client_id, c.name AS client_name,
+  SELECT r.id, r.status, r.unit_id, u.project, u.number, u.price_cents::text AS unit_price_cents, r.client_id, c.name AS client_name,
          r.rep_id, rep.name AS rep_name, r.reserved_at, r.expires_at,
          (SELECT k.id FROM contracts k
            WHERE k.reservation_id = r.id AND k.company_id = r.company_id AND k.status IN ('draft', 'approved')
@@ -65,6 +67,7 @@ const toDto = (r: ReservationRow): ReservationDto => ({
   status: r.status,
   unitId: r.unit_id,
   unitLabel: `${r.project} — ${r.number}`,
+  unitPriceCents: toInt(r.unit_price_cents),
   clientId: r.client_id,
   clientName: r.client_name,
   repId: r.rep_id,

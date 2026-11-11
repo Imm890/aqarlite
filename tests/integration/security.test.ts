@@ -70,7 +70,7 @@ describe('الأمان', () => {
     it('في الوضع الآمن (production): Secure + بادئة __Host-', () => {
       const prev = { ...process.env };
       try {
-        process.env['NODE_ENV'] = 'production';
+        Object.assign(process.env, { NODE_ENV: 'production' });
         resetEnvCache();
         expect(sessionCookieName()).toBe('__Host-aqarlite_sid');
         const c = buildSessionCookie('A'.repeat(43));

@@ -6,7 +6,7 @@ import {
   parseIsoDate,
   todayInTimeZone,
 } from '@/domain/dates';
-import { formatCents, isFinalPriceWithinDiscount, parseMoneyToCents } from '@/domain/money';
+import { formatCents, isFinalPriceWithinDiscount, minFinalPriceCents, parseMoneyToCents } from '@/domain/money';
 import { PERMISSIONS, can, type Permission, type Role } from '@/domain/permissions';
 
 describe('money', () => {
@@ -36,6 +36,17 @@ describe('money', () => {
     // 3,333,333 × 0.95 = 3,166,666.35 ⇒ الحد الأدنى 3,166,667 هللة
     expect(isFinalPriceWithinDiscount(33_333_33, 31_666_67)).toBe(true);
     expect(isFinalPriceWithinDiscount(33_333_33, 31_666_66)).toBe(false);
+  });
+});
+
+describe('minFinalPriceCents', () => {
+  it('يتطابق مع حد الخصم تماماً (أدنى سعر مقبول وما دونه بهللة مرفوض)', () => {
+    for (const unit of [100_000_00, 33_333_33, 1, 19, 20, 21, 99_999_999_99, 7_77]) {
+      const min = minFinalPriceCents(unit);
+      expect(isFinalPriceWithinDiscount(unit, min)).toBe(true);
+      if (min > 1) expect(isFinalPriceWithinDiscount(unit, min - 1)).toBe(false);
+    }
+    expect(minFinalPriceCents(100_000_00)).toBe(95_000_00);
   });
 });
 
