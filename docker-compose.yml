@@ -1,0 +1,16 @@
+# PostgreSQL 16 للتطوير والاختبار فقط. المنفذ مربوط بـ 127.0.0.1 (لا يُعرَّض للشبكة).
+# trust هنا لسهولة التطوير المحلي؛ في الإنتاج استخدم خدمة قاعدة بيانات مُدارة بكلمات مرور وTLS.
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: aqarlite
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - aqarlite-pgdata:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+volumes:
+  aqarlite-pgdata:

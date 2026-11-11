@@ -18,7 +18,8 @@
     "test": "vitest run && vitest run --config vitest.integration.config.mts",
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run --config vitest.integration.config.mts",
-    "audit:prod": "npm audit --omit=dev --audit-level=high"
+    "audit:prod": "npm audit --omit=dev --audit-level=high",
+    "check": "npm run lint && npm run typecheck && npm test && npm run audit:prod"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
