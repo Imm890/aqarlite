@@ -8,6 +8,7 @@ export default defineConfig({
     environment: 'node',
     include: ['tests/integration/**/*.test.ts'],
     globalSetup: ['tests/setup/global.ts'],
+    setupFiles: ['tests/setup/env.ts'],
     fileParallelism: false,
     testTimeout: 30_000,
     hookTimeout: 60_000,

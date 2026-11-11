@@ -8,8 +8,6 @@ import { Errors } from '@/lib/errors';
 export const LOGIN_WINDOW_MINUTES = 15;
 export const MAX_FAILURES_PER_EMAIL = 8;
 export const MAX_FAILURES_PER_IP = 30;
-/** عند عدم وجود وسيط موثوق يشترك الجميع بدلو 'unknown' فنرفع سقفه */
-export const MAX_FAILURES_UNKNOWN_IP = 200;
 
 export function normalizeEmail(email: string): string {
   return email.trim().toLowerCase().slice(0, 254);
@@ -32,8 +30,10 @@ export async function assertLoginAllowed(email: string, ip: string): Promise<voi
   );
   const byEmail = Number(row?.by_email ?? 0);
   const byIp = Number(row?.by_ip ?? 0);
-  const ipLimit = ip === 'unknown' ? MAX_FAILURES_UNKNOWN_IP : MAX_FAILURES_PER_IP;
-  if (byEmail >= MAX_FAILURES_PER_EMAIL || byIp >= ipLimit) throw Errors.rateLimited();
+  // عند عدم معرفة IP العميل (لا وسيط موثوق) يشترك الجميع بالدلو 'unknown'؛ لا نطبّق حد IP عليه
+  // حتى لا يقفل مهاجم واحد الجميع. يبقى حد البريد (لكل حساب) ساري المفعول دائماً.
+  const ipBlocked = ip !== 'unknown' && byIp >= MAX_FAILURES_PER_IP;
+  if (byEmail >= MAX_FAILURES_PER_EMAIL || ipBlocked) throw Errors.rateLimited();
 }
 
 export async function recordLoginAttempt(email: string, ip: string, success: boolean): Promise<void> {
