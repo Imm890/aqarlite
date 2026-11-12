@@ -3,11 +3,14 @@
 نظام متعدد الشركات (Multi-tenant) لبيع الوحدات العقارية بالتقسيط:
 **حجز 72 ساعة ← مسودة عقد ← اعتماد المحاسب ← جدول أقساط تلقائي ← تسجيل دفعات وتوزيعها.**
 
-المكدّس: Next.js 16 (App Router) + TypeScript صارم (`strict` + `noUncheckedIndexedAccess`، ولا `any`) + PostgreSQL 16 + Zod + Argon2id.
-
+Tech:
+Backend: Node-js
+Fronend: Next-js
+Database: PostgreSQL
+Container: Docker
 ---
 
-## 1) التشغيل من جهاز نظيف
+## 1) التشغيل      
 
 المتطلبات: Node.js ≥ 20.9، وPostgreSQL 16 (أسهلها Docker).
 
