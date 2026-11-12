@@ -1,7 +1,6 @@
-    {
-        "attribution":{
+{
+     "attribution":{
             "commit": "",
             "pr": ""
-        }
-
-    }
+    } 
+}
